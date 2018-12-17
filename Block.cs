@@ -6,8 +6,7 @@ namespace mapgen
 {
     class Block
     {
-        public bool Empty;
-
+        // Doors:
         public bool Top;
         public bool Bottom;
         public bool Left;
@@ -15,22 +14,20 @@ namespace mapgen
 
         public bool StartBlock;
 
-        public readonly int X;
-        public readonly int Y;
+        // Position of the block
+        public readonly Point Position;
 
         public Block(int x, int y)
         {
-            Empty = true;
-
             Top = false;
             Bottom = false;
             Left = false;
             Right = false;
 
-            X = x;
-            Y = y;
+            Position = new Point(x, y);
         }
 
+        // Make a door in the direction
         public void MakeDoor(Direction direction)
         {
             switch (direction)

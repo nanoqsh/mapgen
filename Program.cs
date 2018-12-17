@@ -20,17 +20,18 @@ namespace mapgen
 
             foreach (Block block in map)
             {
-                Console.SetCursorPosition(block.X * 3, topCursorPosition - block.Y * 3 - 2);
+                Point position = block.Position;
+                Console.SetCursorPosition(position.X * 3, topCursorPosition - position.Y * 3 - 2);
                 Console.Write('+');
                 Console.Write(block.Top ? ' ' : '-');
                 Console.Write('+');
 
-                Console.SetCursorPosition(block.X * 3, topCursorPosition - block.Y * 3 - 1);
+                Console.SetCursorPosition(position.X * 3, topCursorPosition - position.Y * 3 - 1);
                 Console.Write(block.Left ? ' ' : '|');
                 Console.Write(block.StartBlock ? '.' : ' ');
                 Console.Write(block.Right ? ' ' : '|');
 
-                Console.SetCursorPosition(block.X * 3, topCursorPosition - block.Y * 3);
+                Console.SetCursorPosition(position.X * 3, topCursorPosition - position.Y * 3);
                 Console.Write('+');
                 Console.Write(block.Bottom ? ' ' : '-');
                 Console.Write('+');
@@ -46,7 +47,8 @@ namespace mapgen
         {
             foreach (Block block in blocks)
             {
-                Console.Write("x: " + block.X + " y: " + block.Y + " doors: ");
+                Point position = block.Position;
+                Console.Write("x: " + position.X + " y: " + position.Y + " doors: ");
 
                 if (block.Top)
                     Console.Write("top ");

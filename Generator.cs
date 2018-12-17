@@ -19,11 +19,6 @@ namespace mapgen
 
             // Create map
             blocks = new Block[width, height];
-
-            // Set coordinates for each block
-            for (int i = 0; i < width; i++)
-                for (int j = 0; j < height; j++)
-                    blocks[i, j] = new Block(i, j);
         }
 
         public void Generate(int numOfBlocks)
@@ -56,21 +51,23 @@ namespace mapgen
 
         private bool BuildNextBlock(Block parent, Direction direction)
         {
-            Block block = GetNearBlock(parent, direction);
+            // Get position of new block
+            Point point = GetNearPoint(parent.Position, direction);
 
-            // GetNearBlock returns null if we're trying create
-            // a block outside the map
-
-            if (block == null)
+            // Check is the point inside the map
+            if (!CheckBorder(point))
                 return false;
 
             // Take a block and make a door
             parent.MakeDoor(direction);
 
-            // Make a block with door
-            if (block.Empty)
+            // Get existing block or null
+            Block block = GetBlock(point);
+
+            // Check block
+            if (block == null)
             {
-                CreateBlock(block).MakeDoor(direction.GetOpposite());
+                CreateBlock(point).MakeDoor(direction.GetOpposite());
 
                 // If we created a block will return a true
                 return true;
@@ -82,74 +79,74 @@ namespace mapgen
             return false;
         }
 
-        private Block GetNearBlock(Block block, Direction direction)
+        private Point GetNearPoint(Point position, Direction direction)
         {
-            int x = block.X;
-            int y = block.Y;
+            int x = position.X;
+            int y = position.Y;
 
             switch (direction)
             {
                 case Direction.Top:
-                    y++;
-                    break;
+                    return new Point(x, y + 1);
 
                 case Direction.Bottom:
-                    y--;
-                    break;
+                    return new Point(x, y - 1);
 
                 case Direction.Left:
-                    x--;
-                    break;
+                    return new Point(x - 1, y);
 
                 case Direction.Right:
-                    x++;
-                    break;
+                    return new Point(x + 1, y);
 
                 default:
                     throw new Exception("Wrong direction!");
             }
-
-            if (!CheckBorder(x, y))
-                return null;
-
-            return blocks[x, y];
         }
 
-        private bool CheckBorder(int x, int y)
+        // Get block by position
+        // If block isn't created returns null
+        private Block GetBlock(Point position)
         {
-            return x < width && x >= 0 && y < height && y >= 0;
+            return blocks[position.X, position.Y];
         }
 
-        private Block CreateBlock(int x, int y)
+        // This method checks is the point inside the map
+        private bool CheckBorder(Point position)
         {
-            Block block = blocks[x, y];
+            return
+                   position.X < width
+                && position.X >= 0
+                && position.Y < height
+                && position.Y >= 0;
+        }
 
-            block.Empty = false;
+        private Block CreateBlock(Point position)
+        {
+            // Create new block
+            Block block = new Block(position.X, position.Y);
+
+            // Add new block on the map
+            blocks[position.X, position.Y] = block;
             nonEmptyBlocks.Add(block);
 
+            // Return created block
             return block;
         }
 
-        private Block CreateBlock(Block block)
-        {
-            block.Empty = false;
-            nonEmptyBlocks.Add(block);
-
-            return block;
-        }
-
+        // This method returns random created block
         private Block GetRandomNonEmptyBlock()
         {
             return nonEmptyBlocks[new Random().Next(0, nonEmptyBlocks.Count)];
         }
 
+        // This method creates a block in random place
         private Block CreateRandomBlock()
         {
             Random rand = new Random();
             int x = rand.Next(0, width);
             int y = rand.Next(0, height);
             
-            return CreateBlock(x ,y);
+            return CreateBlock(new Point(x, y));
         }
     }
 }
