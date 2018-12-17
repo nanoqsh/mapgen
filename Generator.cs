@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-enum Direction
-{
-    Top, Bottom, Right, Left
-}
-
 namespace mapgen
 {
     class Generator
@@ -34,22 +29,22 @@ namespace mapgen
         public void Generate(int numOfBlocks)
         {
             if (numOfBlocks > width * height)
-                throw new ArgumentOutOfRangeException("You wanna too many blocks!");
-
+                throw new ArgumentException("Too many blocks!");
+            
             if (numOfBlocks <= 0)
                 throw new ArgumentException("Too few blocks!");
 
             int plan = numOfBlocks;
 
             // Create start block in a random place
-            Block startBlock = SetRandomBlock();
+            Block startBlock = CreateRandomBlock();
             plan--;
 
             startBlock.StartBlock = true;
 
             while (plan != 0)
             {
-                if (BuildNextBlock(GetRandomNonEmptyBlock(), GetRandomDirection()))
+                if (BuildNextBlock(GetRandomNonEmptyBlock(), DirectionExtension.GetRandomDirection()))
                     plan--;
             }
         }
@@ -69,24 +64,22 @@ namespace mapgen
             if (block == null)
                 return false;
 
-            // Take a fucking block and make a door
-            MakeDoor(parent, direction);
+            // Take a block and make a door
+            parent.MakeDoor(direction);
 
             // Make a block with door
             if (block.Empty)
             {
-                MakeDoor(CreateBlock(block), GetOppositeDirection(direction));
+                CreateBlock(block).MakeDoor(direction.GetOpposite());
 
                 // If we created a block will return a true
                 return true;
             }
-            else
-            {
-                MakeDoor(block, GetOppositeDirection(direction));
 
-                // If we didn't create a block will return a false
-                return false;
-            }
+            block.MakeDoor(direction.GetOpposite());
+
+            // If we didn't create a block will return a false
+            return false;
         }
 
         private Block GetNearBlock(Block block, Direction direction)
@@ -116,56 +109,15 @@ namespace mapgen
                     throw new Exception("Wrong direction!");
             }
 
-            if (x >= width || x < 0 || y >= height || y < 0)
+            if (!CheckBorder(x, y))
                 return null;
 
             return blocks[x, y];
         }
 
-        private void MakeDoor(Block block, Direction direction)
+        private bool CheckBorder(int x, int y)
         {
-            switch (direction)
-            {
-                case Direction.Top:
-                    block.Top = true;
-                    return;
-
-                case Direction.Bottom:
-                    block.Bottom = true;
-                    return;
-
-                case Direction.Left:
-                    block.Left = true;
-                    return;
-
-                case Direction.Right:
-                    block.Right = true;
-                    return;
-
-                default:
-                    throw new Exception("Wrong direction!");
-            }
-        }
-
-        private Direction GetOppositeDirection(Direction direction)
-        {
-            switch (direction)
-            {
-                case Direction.Top:
-                    return Direction.Bottom;
-
-                case Direction.Bottom:
-                    return Direction.Top;
-
-                case Direction.Left:
-                    return Direction.Right;
-
-                case Direction.Right:
-                    return Direction.Left;
-
-                default:
-                    throw new Exception("Wrong direction!");
-            }
+            return x < width && x >= 0 && y < height && y >= 0;
         }
 
         private Block CreateBlock(int x, int y)
@@ -186,33 +138,12 @@ namespace mapgen
             return block;
         }
 
-        private Direction GetRandomDirection()
-        {
-            switch (new Random().Next(0, 4))
-            {
-                case 0:
-                    return Direction.Top;
-
-                case 1:
-                    return Direction.Bottom;
-
-                case 2:
-                    return Direction.Left;
-
-                case 3:
-                    return Direction.Right;
-
-                default:
-                    throw new Exception("Wrong direction!");
-            }
-        }
-
         private Block GetRandomNonEmptyBlock()
         {
             return nonEmptyBlocks[new Random().Next(0, nonEmptyBlocks.Count)];
         }
 
-        private Block SetRandomBlock()
+        private Block CreateRandomBlock()
         {
             Random rand = new Random();
             int x = rand.Next(0, width);

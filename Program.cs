@@ -46,7 +46,7 @@ namespace mapgen
         {
             foreach (Block block in blocks)
             {
-                Console.Write("x: " + block.X + " y: " + block.Y + " sides: ");
+                Console.Write("x: " + block.X + " y: " + block.Y + " doors: ");
 
                 if (block.Top)
                     Console.Write("top ");

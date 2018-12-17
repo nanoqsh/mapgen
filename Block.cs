@@ -1,4 +1,7 @@
 ﻿
+using System;
+
+
 namespace mapgen
 {
     class Block
@@ -26,6 +29,31 @@ namespace mapgen
 
             X = x;
             Y = y;
+        }
+
+        public void MakeDoor(Direction direction)
+        {
+            switch (direction)
+            {
+                case Direction.Top:
+                    Top = true;
+                    return;
+
+                case Direction.Bottom:
+                    Bottom = true;
+                    return;
+
+                case Direction.Left:
+                    Left = true;
+                    return;
+
+                case Direction.Right:
+                    Right = true;
+                    return;
+
+                default:
+                    throw new Exception("Wrong direction!");
+            }
         }
     }
 }
