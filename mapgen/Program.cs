@@ -5,9 +5,9 @@ namespace mapgen
 {
     class Program
     {
-        const int WIDTH = 20;
-        const int HEIGHT = 5;
-        const int NUM_BLOCKS = 25;
+        const int WIDTH = 25;
+        const int HEIGHT = 7;
+        const int NUM_BLOCKS = 30;
 
         static void ShowMap(List<Block> map)
         {

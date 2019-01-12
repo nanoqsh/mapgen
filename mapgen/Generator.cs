@@ -5,9 +5,9 @@ namespace mapgen
 {
     class Generator
     {
-        private int width;
-        private int height;
-        private Block[,] blocks;
+        private readonly int width;
+        private readonly int height;
+        private readonly Block[,] blocks;
         private List<Block> nonEmptyBlocks;
 
         public Generator(int width, int height)
@@ -31,8 +31,12 @@ namespace mapgen
 
             int plan = numOfBlocks;
 
-            // Create start block in a random place
-            Block startBlock = CreateRandomBlock();
+            // Create start block in the center of map
+            Block startBlock = CreateBlock(new Point(
+                width / 2,
+                height / 2
+                ));
+            
             plan--;
 
             startBlock.StartBlock = true;
