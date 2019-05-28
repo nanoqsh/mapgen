@@ -42,10 +42,8 @@ namespace mapgen
             startBlock.StartBlock = true;
 
             while (plan != 0)
-            {
                 if (BuildNextBlock(GetRandomNonEmptyBlock(), DirectionExtension.GetRandomDirection()))
                     plan--;
-            }
         }
 
         public List<Block> GetGeneratedMap()
