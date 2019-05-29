@@ -8,7 +8,7 @@ namespace mapgen
         private readonly int width;
         private readonly int height;
         private readonly Block[,] blocks;
-        private List<Block> nonEmptyBlocks;
+        private readonly List<Block> nonEmptyBlocks;
 
         public Generator(int width, int height)
         {
@@ -139,16 +139,6 @@ namespace mapgen
         private Block GetRandomNonEmptyBlock()
         {
             return nonEmptyBlocks[new Random().Next(0, nonEmptyBlocks.Count)];
-        }
-
-        // This method creates a block in random place
-        private Block CreateRandomBlock()
-        {
-            Random rand = new Random();
-            int x = rand.Next(0, width);
-            int y = rand.Next(0, height);
-            
-            return CreateBlock(new Point(x, y));
         }
     }
 }

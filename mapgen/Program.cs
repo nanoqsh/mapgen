@@ -23,17 +23,17 @@ namespace mapgen
                 Point position = block.Position;
                 Console.SetCursorPosition(position.X * 3, topCursorPosition - position.Y * 3 - 2);
                 Console.Write('+');
-                Console.Write(block.Top ? ' ' : '-');
+                Console.Write(block.doors.Contains(Direction.Top) ? ' ' : '-');
                 Console.Write('+');
 
                 Console.SetCursorPosition(position.X * 3, topCursorPosition - position.Y * 3 - 1);
-                Console.Write(block.Left ? ' ' : '|');
+                Console.Write(block.doors.Contains(Direction.Left) ? ' ' : '|');
                 Console.Write(block.StartBlock ? '.' : ' ');
-                Console.Write(block.Right ? ' ' : '|');
+                Console.Write(block.doors.Contains(Direction.Right) ? ' ' : '|');
 
                 Console.SetCursorPosition(position.X * 3, topCursorPosition - position.Y * 3);
                 Console.Write('+');
-                Console.Write(block.Bottom ? ' ' : '-');
+                Console.Write(block.doors.Contains(Direction.Bottom) ? ' ' : '-');
                 Console.Write('+');
             }
 
@@ -50,16 +50,16 @@ namespace mapgen
                 Point position = block.Position;
                 Console.Write("x: " + position.X + " y: " + position.Y + " doors: ");
 
-                if (block.Top)
+                if (block.doors.Contains(Direction.Top))
                     Console.Write("top ");
 
-                if (block.Bottom)
+                if (block.doors.Contains(Direction.Bottom))
                     Console.Write("bottom ");
 
-                if (block.Left)
+                if (block.doors.Contains(Direction.Left))
                     Console.Write("left ");
 
-                if (block.Right)
+                if (block.doors.Contains(Direction.Right))
                     Console.Write("right ");
 
                 Console.WriteLine();

@@ -6,11 +6,20 @@ namespace mapgen
 {
     enum Direction
     {
-        Top, Bottom, Right, Left
+        None   = 0,
+        Top    = 1 << 0,
+        Bottom = 1 << 1,
+        Right  = 1 << 2,
+        Left   = 1 << 3
     }
 
     static class DirectionExtension
     {
+        public static bool Contains(this Direction direction, Direction other)
+        {
+            return (direction & other) == other;
+        }
+
         public static Direction GetOpposite(this Direction direction)
         {
             switch (direction)
